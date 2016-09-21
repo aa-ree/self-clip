@@ -1,0 +1,385 @@
+<template id="sdtemplate">
+  <style>
+    .icons{
+        width: 150px;
+        height: 150px;
+        display: inline-block;
+        position: relative;
+        padding-right: 2%;
+        float: left;
+    }
+    .base{
+        position: relative;
+        width: 150px;
+        height: 150px;
+        background: #80B88C;
+        border-radius: 50%;
+        overflow: hidden;
+        float: left;
+    }
+    .base:before{
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 35px;
+        width: 80px;
+        height: 90px;
+        background: rgb(255, 201, 177);
+        border-radius: 30px;
+        z-index: 1;
+    }
+    .base:after{
+        content: "";
+        position: absolute;
+        top: 100px;
+        left: 40px;
+        width: 70px;
+        height: 50px;
+        background: #A0DBDF;
+        border-radius: 15px;
+        z-index: 1;
+    }
+    .hair{
+        position: absolute;
+        width: 100px;
+        height: 150px;
+        background: rgb(51,49,49);
+        top: -11px;
+        left: 25px;
+        border-radius: 45px;
+    }
+    .hair:before{
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 8px;
+        height: 100px;
+        background: rgb(51,49,49);
+        -webkit-clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
+        clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
+        z-index: 1;
+    }
+    .hair:after{
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 70px;
+        width: 26px;
+        height: 49px;
+        background: rgb(51,49,49);
+        -webkit-clip-path: polygon(0 0, 80% 100%, 80% 0%);
+        clip-path: polygon(0 0, 80% 100%, 80% 0%);
+        z-index: 1;
+    }
+    .length-short{
+        height: 120px;
+    }
+    .length-long{
+        height: 150px;
+    }
+    .bang-left:before{
+        width: 65px;
+    }
+    .bang-right:after{
+        top: 19px;
+        left: 16px;
+        width: 76px;
+        height: 42px;
+        -webkit-clip-path: polygon(0 0, 100% 0%, 100% 100%);
+        clip-path: polygon(0 0, 100% 0%, 100% 100%);
+    }
+    .bang-none:before, .bang-right:before{
+        width: 25px;
+    }
+    .sense{
+        position: relative;
+        width: 15px;
+        height: 25px;
+        background: rgb(51,49,49);
+        top: 49px;
+        left: 48px;
+        border-radius: 5px;
+        z-index: 1;
+        box-shadow: 40px 0 rgb(51,49,49);
+    }
+    .sense:before{
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 20px;
+        background: rgb(255, 201, 177);
+        right: 23px;
+        top: 8px;
+        border-radius: 5px;
+        box-shadow: 80px 0 rgb(255, 201, 177);
+    }
+    .sense:after{
+        content: "";
+        position: absolute;
+        border-radius: 0 0 30px 33px;
+        background: #fff;
+    }
+    .eyes-pos-down{
+        bottom: 105px;
+    }
+    .eyes-pos-left:after{
+        left: 17px;
+    }
+    .mouth-joy:after{
+        width: 15px;
+        height: 15px;
+        top: 30px;
+        left: 20px;
+    }
+    .sense.mouth-shy:after{
+        width: 5px;
+        height: 10px;
+        top: 30px;
+        left: 24px;
+    }
+    .accessory.glass{
+        width: 24px;
+        height: 28px;
+        border-radius: 3px;
+        top: 46px;
+        position: absolute;
+        left: 43px;
+        z-index: 1;
+        background: rgba(124, 125, 124, 0.44);
+        box-shadow: 40px 0 rgba(124, 125, 124, 0.44);
+    }
+    .glass:before{
+        content: "";
+        width: 10px;
+        border: 1px solid rgba(124, 125, 124, 0.44);
+        position: absolute;
+        right: 24px;
+        bottom: 19px;
+        box-shadow: 38px 3px rgba(124, 125, 124, 0.44), 76px 0 rgba(124, 125, 124, 0.44);
+    }
+    .eyes-small{
+        width: 10px;
+        height: 15px;
+        bottom: 100px;
+        left: 50px;
+        box-shadow: 42px 0 rgb(51,49,49);
+        bottom: 75px;
+    }
+    .eyes-small:after{
+        left: 19px;
+    }
+
+    .eyes-small:before{
+        box-shadow: 84px 0 rgb(255, 201, 177);
+    }
+  </style>
+</template>
+<script>
+
+    function BindConfig(name, value, config){
+        this.name = name;
+        this.value = value;
+        this.config = config;
+    }
+
+    BindConfig.prototype.setName = function(name){
+        this.name = name;
+    }
+    BindConfig.prototype.setValue = function(value){
+        this.value = value;
+    }
+    BindConfig.prototype.getValue = function(){
+        return this.value;
+    }
+    BindConfig.prototype.getName = function(){
+        return this.name;
+    }
+    BindConfig.prototype.setConfig = function(config){
+        var newName = this.getName(),
+            newValue = this.getValue();
+        
+        for(var key in config){
+            if(key === newName){
+                config[key] = newValue;
+            } else {
+                //if(typeof config[key] === 'object'){
+                    for(var name in config[key]){
+                       if(name === newName){
+                        config[key][name] = newValue;
+                       }
+                    }
+                //} 
+            }
+        }
+    }
+    BindConfig.prototype.getConfig = function(){
+        return this.config;
+    }
+   //(function(){
+        function checkSupport(){
+          return ('registerElement' in document);
+        }
+        var tasks;
+        function parseConfig(input){
+            tasks = [];
+            for(var task in input){
+                if(input[task] !== 'none'){
+                    tasks.push(task);
+                }
+                var exist = tasks.indexOf(task);
+                if(exist != -1){
+                    if(typeof input[task] === 'object'){
+                        for(var ts in input[task]){
+                            tasks[exist] += ' '+ts+'-'+input[task][ts];
+                        }
+                    } else {
+                        tasks[exist] += ' '+input[task];
+                    }
+                }
+                
+            }
+            return tasks;
+        }
+
+        function toObject(arr){
+            var obj = {}, s, c, sArr = [];
+            for(var i=0; i<arr.length; i++){
+                s = arr[i].toString();
+                c = s.match(/^(\S+)\s(.*)/).slice(1);
+                for(var j=1; j<c.length; j++){
+                    obj[c[j-1]] =  c[j];
+                }
+            }
+            return obj;
+        }
+
+        function changeHandler(evt){
+            var to = evt.target;
+            to.thisValue.setName(this.name);
+            to.thisValue.setValue(this.value);
+            to.thisValue.setConfig(to.config);
+            parseConfig(to.thisValue.getConfig());
+            toObj = toObject(tasks);
+            to.el.setAttribute('data-config', JSON.stringify(toObj));
+            var txt = document.querySelector('textarea');
+            txt.value = '<self-clip  data-config='+ JSON.stringify(toObj) +'></self-clip>';
+            txt.select();
+        }
+        function customElement(){
+        //constructor on local
+        var myapp = {};
+
+        if(checkSupport()){
+          var doc = document.currentScript.ownerDocument,
+              t = doc.querySelector('#sdtemplate')
+              proto = Object.create(HTMLElement.prototype),
+              fg = doc.createDocumentFragment(),
+              content = doc.createElement('div'),
+              base = doc.createElement('div'),
+              tk = '';
+
+              proto.createdCallback = function(){
+                var attr = this.getAttribute('data-config'),
+                    config = JSON.parse(attr),
+                    newClass = "eyes-pos", i,
+                    oldValue = [], toObj, that = this,
+                    select = document.getElementsByTagName('select'),
+                    root1 = this.createShadowRoot();
+
+                    for(i=0; i<select.length;i++){
+                        oldValue[i] = new BindConfig(select[i].name, select[i].value, config);
+                        select[i].addEventListener("change", changeHandler, false);
+                        select[i].config = config;
+                        select[i].thisValue = oldValue[i];
+                        select[i].el = that;
+                    }
+                    if(config.hair.length === 'short'){
+                        config.sense[newClass] = "down";
+                    }
+
+                    parseConfig(config);
+                    tk = new TasksObj(doc, tasks, t, that, root1, false);
+                    var c = tk.createFragment();
+                    tk.pasteContent(c, root1);
+                    var txt = document.querySelector('textarea');
+                    txt.value = '<self-clip  data-config="'+JSON.stringify(toObject(tasks))+'"></self-clip>';
+            }
+
+            proto.attributeChangedCallback = function(){
+                tk.setTasks(tasks);
+            }
+            myapp.selfClip = document.registerElement('self-clip', {prototype: proto});
+
+        } else {
+          alert("Sorry, your browser not supporting custom Elements without polyfill.");
+        }
+    }
+    customElement();
+
+    function TasksObj(doc, tasks, t, el, root1, container){
+        this.doc = doc;
+        this.tasks = tasks;
+        this.t = t;
+        this.el = el;
+        this.root = root1;
+        this.container = container;
+    }
+    TasksObj.prototype.createFragment = function(){
+        var task = this.getTasks(),
+            len = task.length,
+            div = [], i, clone, content,
+            fg = this.doc.createDocumentFragment(),
+            base = this.doc.createElement('div'),
+            eyesColor = this.el.getAttribute('data-eyes-color'),
+            clothColor = this.el.getAttribute('data-cloth'),
+            bgColor = this.el.getAttribute('data-background');
+
+            if(this.container){
+                content = this.t.content.querySelector('div');
+                content.innerHTML = '';
+            } else {
+                content = this.doc.createElement('div');
+                content.className = 'icons';
+            }
+
+        for(i=0; i<len; i++){
+            div[i] = this.doc.createElement('div');
+            div[i].className = task[i];
+            fg.appendChild(div[i]);
+        }
+
+        base.className = 'base';
+        //if(bgColor){
+            //var b = document.createAttribute('data-background');
+            //b.value = bgColor;
+          //  base.setAttribute('data-background', bgColor);   
+        //}
+        content.appendChild(base);
+
+        content.appendChild(fg);
+        return content;
+    }
+    TasksObj.prototype.setRoot = function(r){
+        this.root.textContent = r;
+    }
+    TasksObj.prototype.setTasks = function(t){
+        this.tasks = t;
+        this.container = true;
+        this.setRoot('');
+        var c = this.createFragment();
+        this.pasteContent(c, this.root);
+    }
+    TasksObj.prototype.pasteContent = function(c,root){
+
+        this.t.content.appendChild(c);
+        var clone = document.importNode(this.t.content, true);
+        this.el.style.width = '150px';
+        this.el.style.height = '150px';
+        root.appendChild(clone);
+    }
+    TasksObj.prototype.getTasks = function(){
+        return this.tasks;
+    }
+    //})();
+
+</script>

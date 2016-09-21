@@ -1,0 +1,80 @@
+body{
+    font-size: 18px;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: lighter;
+}
+
+self-clip {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+}
+form {
+    width: 50%;
+    margin: 0 auto;
+}
+fieldset {
+    border: 1px solid #ccc;
+    margin-bottom: 30px;
+}
+form select {
+    display: block;
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 35px;
+    font-size: 1em;
+    border-radius: none;
+    color: #999;
+    background: #fff;
+}
+form select:not(:last-child){
+    margin-bottom: 20px;
+}
+textarea {
+    width: 50%;
+    height: 100px;
+    resize: none;
+    margin: 15px auto;
+    display: block;
+    font-size: 1.3em;
+    font-weight: 100;
+    color: #fff;
+    background: #585757;
+    box-sizing: border-box;
+    padding: 10px;
+    outline: none;
+    border: 1px solid #ccc;
+}
+
+
+#github-svg {
+    width: 80px;
+    height: 80px;
+    fill: #a4cea5;
+    color: #fff;
+    position: absolute;
+    top: 0;
+        border: 0;
+        right: 0;
+    }
+    .octo-arm {
+        transform-origin: 130px 106px;
+    }
+    .octo-arm, .octo-body {
+        fill: currentColor; 
+    }
+    .github-corner:hover .octo-arm {
+        animation: octocat-wave 560ms ease-in-out
+    }
+
+    @keyframes octocat-wave {
+        0%,100% {
+            transform:rotate(0)
+        }
+        20%,60% {
+            transform:rotate(-25deg)
+        }
+        40%,80% {
+            transform:rotate(10deg)
+        }
+    }
