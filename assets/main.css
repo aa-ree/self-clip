@@ -45,7 +45,12 @@ textarea {
     outline: none;
     border: 1px solid #ccc;
 }
-
+.social{
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 0.7em;
+}
 
 #github-svg {
     width: 80px;
