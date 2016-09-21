@@ -223,7 +223,6 @@
     BindConfig.prototype.getConfig = function(){
         return this.config;
     }
-   //(function(){
         function checkSupport(){
           return ('registerElement' in document);
         }
@@ -270,7 +269,8 @@
             toObj = toObject(tasks);
             to.el.setAttribute('data-config', JSON.stringify(toObj));
             var txt = document.querySelector('textarea');
-            txt.value = '<self-clip  data-config='+ JSON.stringify(toObj) +'></self-clip>';
+            txt.value = "<self-clip  data-config='"+ JSON.stringify(toObj) +"'></self-clip>";
+            console.log(txt);
             txtHandler(txt, to.color.getBackground(), to.color.getHair(), to.color.getCloth(), to.color.getEyes());
         }
         function customElement(){
@@ -279,7 +279,7 @@
 
         if(checkSupport()){
           var doc = document.currentScript.ownerDocument,
-              t = doc.querySelector('#sdtemplate')
+              t = doc.querySelector('#sdtemplate'),
               proto = Object.create(HTMLElement.prototype),
               fg = doc.createDocumentFragment(),
               content = doc.createElement('div'),
@@ -295,9 +295,8 @@
                     config = JSON.parse(attr), c, control,
                     newClass = "eyes-pos", i, txt, start, end,
                     oldValue = [], toObj, that = this,
-                    select = document.getElementsByTagName('select'),
-                    root1 = this.createShadowRoot();
-
+                    select = document.getElementsByTagName('select');
+                    // root1 = this.createShadowRoot();
                     controll = new Controller(bg, hair, cloth, eyes);
 
                     for(i=0; i<select.length;i++){
@@ -313,12 +312,18 @@
                     }
 
                     parseConfig(config);
-                    tk = new TasksObj(doc, tasks, t, that, root1, false);
+                    //var clip = document.getElementsByTagName('self-clip');
+                    //if(clip.length > 1){
+                    //    tk = new TasksObj(doc, tasks, t, that, true);
+                    //} else {
+                        tk = new TasksObj(doc, tasks, t, that, false);
+                    //}
+                    
+                    //debugger;
                     c = tk.createFragment();
-                    tk.pasteContent(c, root1);
-
+                    tk.pasteContent(c);
                     txt = document.querySelector('textarea');
-                    txt.value = '<self-clip  data-config="'+JSON.stringify(toObject(tasks))+'"></self-clip>';
+                    txt.value = "<self-clip  data-config='"+JSON.stringify(toObject(tasks))+"'></self-clip>";
                     addAttr(controll, txt, this);
                     txtHandler(txt, controll.getBackground(), controll.getHair(), controll.getCloth(), controll.getEyes(), false);
             }
@@ -450,41 +455,57 @@
              end = txt.value.substring(middle.length+start.length, txt.length);
 
             if(change){
+                console.log(end);
                 txt.value = start + middle + end;
             } else txt.value = start + middle + org;
 
              return txt;
      }
 
-    function TasksObj(doc, tasks, t, el, root1, container){
+    function TasksObj(doc, tasks, t, el, container){
         this.doc = doc;
         this.tasks = tasks;
         this.t = t;
         this.el = el;
-        this.root = root1;
+        this.root = el.createShadowRoot();
         this.container = container;
+    }
+    TasksObj.prototype.setT = function(){
+
+        if(this.t.content && this.t.content.childNodes.length > 3){
+            var len = this.t.content.childNodes.length;
+            var child = this.t.content.childNodes[len-1].remove();
+        }
     }
     TasksObj.prototype.createFragment = function(){
         var task = this.getTasks(),
             len = task.length,
             div = [], i, clone, content,
             fg = this.doc.createDocumentFragment(),
-            base = this.doc.createElement('div');
+            base = this.doc.createElement('div'),
+            clip = document.getElementsByTagName('self-clip');
 
             if(this.container){
                 content = this.t.content.querySelector('div');
                 content.innerHTML = '';
             } else {
-                content = this.doc.createElement('div');
-                content.className = 'icons';
+                 content = this.doc.createElement('div');
+                 content.className = 'icons';
+                 this.setT();
+                 //debugger;
             }
 
         for(i=0; i<len; i++){
             div[i] = this.doc.createElement('div');
             div[i].className = task[i];
-            fg.appendChild(div[i]);
+            //debugger;
+            //if(clip.length > 1){
+             //fg.removeChild('.icons').appendChild(div[i]);
+            //} else {
+             fg.appendChild(div[i]);
+            //}
+            
         }
-
         base.className = 'base';
         content.appendChild(base);
         content.appendChild(fg);
@@ -500,19 +521,18 @@
         var c = this.createFragment();
         this.pasteContent(c, this.root);
     }
-    TasksObj.prototype.pasteContent = function(c,root){
-
+    TasksObj.prototype.pasteContent = function(c){
         var eyesColor = this.el.getAttribute('data-eyes'),
             clothColor = this.el.getAttribute('data-cloth'),
             bgColor = this.el.getAttribute('data-background'),
             hairColor = this.el.getAttribute('data-hair'),
             clone, node, i;
-
+            if(this.t.content.querySelector('icons'));
             this.t.content.appendChild(c);
             clone = document.importNode(this.t.content, true);
             this.el.style.width = '150px';
             this.el.style.height = '150px';
-            root.appendChild(clone);
+            this.root.appendChild(clone);
 
             node = this['root'].childNodes,
             style = node[1]['sheet'].cssRules;
@@ -542,6 +562,5 @@
     TasksObj.prototype.getTasks = function(){
         return this.tasks;
     }
-    //})();
 
 </script>

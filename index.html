@@ -8,7 +8,7 @@
   <link rel="import" href="component/element.html">
 </head>
 <body>
-  <self-clip id='myself' data-background="#80B88C" data-hair="#000000" data-cloth="#A0DBDF" data-eyes="#000000" data-config='{ "hair": { "length": "long", "bang": "left" }, "sense": { "eyes": "big", "mouth": "joy" }, "accessory": "none" }'></self-clip>
+  <self-clip data-background="#80B88C" data-hair="#000000" data-cloth="#A0DBDF" data-eyes="#000000" data-config='{ "hair": { "length": "long", "bang": "left" }, "sense": { "eyes": "big", "mouth": "joy" }, "accessory": "none" }'></self-clip>
   <form>
     <fieldset>
       <legend>Select hair style: </legend>
@@ -16,7 +16,6 @@
           <option value="long">long</option>
           <option value="short">short</option>
       </select>
-
       <select name="bang">
           <option value="left">left</option>
           <option value="right">right</option>
@@ -24,7 +23,6 @@
       </select>
       <legend>Select hair color: <input id="hair" type="color"  value="#ff0000" /></legend>
     </fieldset>
-
     <fieldset>
       <legend>Select eyes size: </legend>
       <select name="eyes">
@@ -33,7 +31,6 @@
       </select>
       <legend>Select eyes color: <input id="eyes" type="color"  value="#ff0000" /></legend>
      </fieldset>
-
      <fieldset>
       <legend>Select mouth size: </legend>
       <select name="mouth">
@@ -41,7 +38,6 @@
           <option value="shy">shy</option>
       </select>
     </fieldset>
-
     <fieldset>
       <legend>Select accessory: </legend>
       <select name="accessory">
@@ -53,9 +49,7 @@
       <legend>Select cloth color: <input id="cloth" type="color"  value="#999999" /></legend>
     </fieldset>
   </form>
-
   <textarea readonly></textarea>
-
   <a href="https://github.com/reehoiyan/self-clip" class="github-corner" aria-label="View source on Github">
     <svg id="github-svg" viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
