@@ -148,6 +148,16 @@
         background: rgba(124, 125, 124, 0.44);
         box-shadow: 40px 0 rgba(124, 125, 124, 0.44);
     }
+    .accessory.earrings{
+        width: 5px;
+        height: 5px;
+        background: #fff;
+        position: absolute;
+        left: 30px;
+        top: 70px;
+        z-index: 1;
+        box-shadow: 84px 0 #fff;
+    }
     .glass:before{
         content: "";
         width: 10px;
@@ -202,20 +212,17 @@
             if(key === newName){
                 config[key] = newValue;
             } else {
-                //if(typeof config[key] === 'object'){
-                    for(var name in config[key]){
-                       if(name === newName){
-                        config[key][name] = newValue;
-                       }
+                for(var name in config[key]){
+                    if(name === newName){
+                    config[key][name] = newValue;
                     }
-                //} 
+                }
             }
         }
     }
     BindConfig.prototype.getConfig = function(){
         return this.config;
     }
-   //(function(){
         function checkSupport(){
           return ('registerElement' in document);
         }
@@ -262,8 +269,9 @@
             toObj = toObject(tasks);
             to.el.setAttribute('data-config', JSON.stringify(toObj));
             var txt = document.querySelector('textarea');
-            txt.value = '<self-clip  data-config='+ JSON.stringify(toObj) +'></self-clip>';
-            txt.select();
+            txt.value = "<self-clip  data-config='"+ JSON.stringify(toObj) +"'></self-clip>";
+            console.log(txt);
+            txtHandler(txt, to.color.getBackground(), to.color.getHair(), to.color.getCloth(), to.color.getEyes());
         }
         function customElement(){
         //constructor on local
@@ -271,7 +279,7 @@
 
         if(checkSupport()){
           var doc = document.currentScript.ownerDocument,
-              t = doc.querySelector('#sdtemplate')
+              t = doc.querySelector('#sdtemplate'),
               proto = Object.create(HTMLElement.prototype),
               fg = doc.createDocumentFragment(),
               content = doc.createElement('div'),
@@ -280,17 +288,23 @@
 
               proto.createdCallback = function(){
                 var attr = this.getAttribute('data-config'),
-                    config = JSON.parse(attr),
-                    newClass = "eyes-pos", i,
+                    bg = this.getAttribute('data-background'),
+                    hair = this.getAttribute('data-hair'),
+                    cloth = this.getAttribute('data-cloth'),
+                    eyes = this.getAttribute('data-eyes'),
+                    config = JSON.parse(attr), c, control,
+                    newClass = "eyes-pos", i, txt, start, end,
                     oldValue = [], toObj, that = this,
-                    select = document.getElementsByTagName('select'),
-                    root1 = this.createShadowRoot();
+                    select = document.getElementsByTagName('select');
+                    // root1 = this.createShadowRoot();
+                    controll = new Controller(bg, hair, cloth, eyes);
 
                     for(i=0; i<select.length;i++){
                         oldValue[i] = new BindConfig(select[i].name, select[i].value, config);
                         select[i].addEventListener("change", changeHandler, false);
                         select[i].config = config;
                         select[i].thisValue = oldValue[i];
+                        select[i].color = controll;
                         select[i].el = that;
                     }
                     if(config.hair.length === 'short'){
@@ -298,11 +312,20 @@
                     }
 
                     parseConfig(config);
-                    tk = new TasksObj(doc, tasks, t, that, root1, false);
-                    var c = tk.createFragment();
-                    tk.pasteContent(c, root1);
-                    var txt = document.querySelector('textarea');
-                    txt.value = '<self-clip  data-config="'+JSON.stringify(toObject(tasks))+'"></self-clip>';
+                    //var clip = document.getElementsByTagName('self-clip');
+                    //if(clip.length > 1){
+                    //    tk = new TasksObj(doc, tasks, t, that, true);
+                    //} else {
+                        tk = new TasksObj(doc, tasks, t, that, false);
+                    //}
+                    
+                    //debugger;
+                    c = tk.createFragment();
+                    tk.pasteContent(c);
+                    txt = document.querySelector('textarea');
+                    txt.value = "<self-clip  data-config='"+JSON.stringify(toObject(tasks))+"'></self-clip>";
+                    addAttr(controll, txt, this);
+                    txtHandler(txt, controll.getBackground(), controll.getHair(), controll.getCloth(), controll.getEyes(), false);
             }
 
             proto.attributeChangedCallback = function(){
@@ -316,13 +339,143 @@
     }
     customElement();
 
-    function TasksObj(doc, tasks, t, el, root1, container){
+    function inputAction(bg, hair, cloth, eyes, input){
+        switch (input.id) {
+            case "hair":
+                input.value = hair;
+                break;
+
+            case "background":
+                input.value = bg;
+                break;
+
+            case "cloth":
+                input.value = cloth;
+                break;
+
+            case "eyes":
+                input.value = eyes;
+                break;
+
+            default:
+                input.value = "#ffffff";
+        }
+    }
+
+    function changeColorHandler(evt){
+
+        evt.target.self.setAttribute('data-'+this.id, this.value);
+        switch (this.id) {
+            case "hair":
+                evt.target.ctrl.setHair(this.value);
+                break;
+
+            case "background":
+                evt.target.ctrl.setBackground(this.value);
+                break;
+
+            case "cloth":
+                evt.target.ctrl.setCloth(this.value);
+                break;
+
+            case "eyes":
+                evt.target.ctrl.setEyes(this.value);
+                break;
+
+            default:
+                break;
+        }
+
+        txtHandler(evt.target.txt, 
+            evt.target.ctrl.getBackground(), 
+            evt.target.ctrl.getHair(), 
+            evt.target.ctrl.getCloth(), 
+            evt.target.ctrl.getEyes(), true);
+    }
+
+
+    function Controller(bg, hair, cloth, eyes){
+        this.bg = bg;
+        this.hair = hair;
+        this.cloth = cloth;
+        this.eyes = eyes;
+    }
+    Controller.prototype.setBackground = function(b){
+        this.bg = b;
+    }
+    Controller.prototype.getBackground = function(){
+        return this.bg;
+    }
+    Controller.prototype.setHair = function(b){
+        this.hair = b;
+    }
+    Controller.prototype.getHair = function(){
+        return this.hair;
+    }
+    Controller.prototype.setCloth = function(b){
+        this.cloth = b;
+    }
+    Controller.prototype.getCloth = function(){
+        return this.cloth;
+    }
+    Controller.prototype.setEyes = function(b){
+        this.eyes = b;
+    }
+    Controller.prototype.getEyes = function(){
+        return this.eyes;
+    }
+
+    function addAttr(controller, txt, self){
+        var latestBg = controller.getBackground(),
+            latestHair = controller.getHair(),
+            latestEyes = controller.getEyes(),
+            latestCloth = controller.getCloth();
+
+        if( latestBg || latestHair || latestEyes || latestCloth){
+            var input = document.getElementsByTagName('input');
+                for(var i=0; i<input.length; i++){
+                    input[i].addEventListener("input", changeColorHandler, false);
+                    input[i].ctrl = controller;
+                    input[i].self = self;
+                    input[i].txt = txt;
+                    inputAction(latestBg, latestHair, latestCloth, latestEyes, input[i]);    
+                }
+        }
+    }
+
+     function txtHandler(txt, latestBg, latestHair, latestCloth, latestEyes, change){
+         var start = txt.value.substring(0, 11),
+             org = txt.value.substring(12, txt.length),
+             
+             middle = (latestBg ? 'data-background="'+latestBg+'" ' : '' )+
+                        ( latestHair ? 'data-hair="'+latestHair+'" ' : '') + 
+                        ( latestCloth ? 'data-cloth="'+latestCloth+'" ' : '')+
+                        ( latestEyes ? 'data-eyes="'+latestEyes+'" ' : ''),
+
+             end = txt.value.substring(middle.length+start.length, txt.length);
+
+            if(change){
+                console.log(end);
+                txt.value = start + middle + end;
+            } else txt.value = start + middle + org;
+
+             return txt;
+     }
+
+    function TasksObj(doc, tasks, t, el, container){
         this.doc = doc;
         this.tasks = tasks;
         this.t = t;
         this.el = el;
-        this.root = root1;
+        this.root = el.createShadowRoot();
         this.container = container;
+    }
+    TasksObj.prototype.setT = function(){
+
+        if(this.t.content && this.t.content.childNodes.length > 3){
+            var len = this.t.content.childNodes.length;
+            var child = this.t.content.childNodes[len-1].remove();
+        }
     }
     TasksObj.prototype.createFragment = function(){
         var task = this.getTasks(),
@@ -330,32 +483,31 @@
             div = [], i, clone, content,
             fg = this.doc.createDocumentFragment(),
             base = this.doc.createElement('div'),
-            eyesColor = this.el.getAttribute('data-eyes-color'),
-            clothColor = this.el.getAttribute('data-cloth'),
-            bgColor = this.el.getAttribute('data-background');
+            clip = document.getElementsByTagName('self-clip');
 
             if(this.container){
                 content = this.t.content.querySelector('div');
                 content.innerHTML = '';
             } else {
-                content = this.doc.createElement('div');
-                content.className = 'icons';
+                 content = this.doc.createElement('div');
+                 content.className = 'icons';
+                 this.setT();
+                 //debugger;
             }
 
         for(i=0; i<len; i++){
             div[i] = this.doc.createElement('div');
             div[i].className = task[i];
-            fg.appendChild(div[i]);
+            //debugger;
+            //if(clip.length > 1){
+             //fg.removeChild('.icons').appendChild(div[i]);
+            //} else {
+             fg.appendChild(div[i]);
+            //}
+            
         }
-
         base.className = 'base';
-        //if(bgColor){
-            //var b = document.createAttribute('data-background');
-            //b.value = bgColor;
-          //  base.setAttribute('data-background', bgColor);   
-        //}
         content.appendChild(base);
-
         content.appendChild(fg);
         return content;
     }
@@ -369,17 +521,46 @@
         var c = this.createFragment();
         this.pasteContent(c, this.root);
     }
-    TasksObj.prototype.pasteContent = function(c,root){
+    TasksObj.prototype.pasteContent = function(c){
+        var eyesColor = this.el.getAttribute('data-eyes'),
+            clothColor = this.el.getAttribute('data-cloth'),
+            bgColor = this.el.getAttribute('data-background'),
+            hairColor = this.el.getAttribute('data-hair'),
+            clone, node, i;
+            if(this.t.content.querySelector('icons'));
+            this.t.content.appendChild(c);
+            clone = document.importNode(this.t.content, true);
+            this.el.style.width = '150px';
+            this.el.style.height = '150px';
+            this.root.appendChild(clone);
 
-        this.t.content.appendChild(c);
-        var clone = document.importNode(this.t.content, true);
-        this.el.style.width = '150px';
-        this.el.style.height = '150px';
-        root.appendChild(clone);
+            node = this['root'].childNodes,
+            style = node[1]['sheet'].cssRules;
+            if(eyesColor || clothColor || bgColor || hairColor){
+                for(i = 0; i<style.length;i++){
+                    if(style[i].selectorText === '.base'){
+                        style[i].style.background = bgColor;
+                    }
+                    if(style[i].selectorText === '.hair' || style[i].selectorText === '.hair::before'
+                       || style[i].selectorText === '.hair::after' ){
+                        style[i].style.background = hairColor;
+                    }
+                    if(style[i].selectorText === '.sense'){
+                        style[i].style.background = eyesColor;
+                        style[i].style.boxShadow = eyesColor+ " 40px 0px ";
+                    }
+                    if(style[i].selectorText === '.eyes-small'){
+                        style[i].style.boxShadow = eyesColor+ " 42px 0px ";
+                    }
+                    if(style[i].selectorText === '.base::after'){
+                        style[i].style.background = clothColor;
+                    }
+               }
+            }
+        
     }
     TasksObj.prototype.getTasks = function(){
         return this.tasks;
     }
-    //})();
 
 </script>
