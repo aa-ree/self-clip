@@ -32,7 +32,7 @@ form select:not(:last-child){
 }
 textarea {
     width: 50%;
-    height: 100px;
+    height: 115px;
     resize: none;
     margin: 15px auto;
     display: block;
@@ -47,12 +47,12 @@ textarea {
 }
 .social{
     width: 50%;
-    margin: 0 auto;
+    margin: 50px auto;
     text-align: center;
     line-height: 0.7em;
 }
 
-#github-svg {
+    #github-svg {
     width: 80px;
     height: 80px;
     fill: #a4cea5;

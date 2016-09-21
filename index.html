@@ -8,7 +8,7 @@
   <link rel="import" href="component/element.html">
 </head>
 <body>
-  <self-clip id='myself' data-cloth="#000" data-eyes-color="black" data-config='{ "hair": { "length": "long", "bang": "left" }, "sense": { "eyes": "big", "mouth": "joy" }, "accessory": "none" }'></self-clip>
+  <self-clip id='myself' data-background="#80B88C" data-hair="#000000" data-cloth="#A0DBDF" data-eyes="#000000" data-config='{ "hair": { "length": "long", "bang": "left" }, "sense": { "eyes": "big", "mouth": "joy" }, "accessory": "none" }'></self-clip>
   <form>
     <fieldset>
       <legend>Select hair style: </legend>
@@ -22,6 +22,7 @@
           <option value="right">right</option>
           <option value="none">none</option>
       </select>
+      <legend>Select hair color: <input id="hair" type="color"  value="#ff0000" /></legend>
     </fieldset>
 
     <fieldset>
@@ -30,6 +31,7 @@
           <option value="big">big</option>
           <option value="small">small</option>
       </select>
+      <legend>Select eyes color: <input id="eyes" type="color"  value="#ff0000" /></legend>
      </fieldset>
 
      <fieldset>
@@ -47,6 +49,8 @@
           <option value="earrings">earrings</option>
           <option value="glass">glass</option>
       </select>
+      <legend>Select background color: <input id="background" type="color"  value="#ff0000" /></legend>
+      <legend>Select cloth color: <input id="cloth" type="color"  value="#999999" /></legend>
     </fieldset>
   </form>
 
