@@ -6,18 +6,18 @@ So, `<self-clip>` is rarely supported, it's able to run in which had implemented
 
 ## Usage
 
-To use it, simply download the element.min.html that inside the component file.
-### Import to your html:
+To use it, simply download the *element.min.html* that inside the component file.
+### 1. Import to your html:
 ```html
 <link rel="import" href="element.min.html">
 ```
 
-### Use self-clip wherever you want:
+### 2. Use self-clip wherever you want:
 ```html
 <self-clip></self-clip>
 ```
 
-### Set `data-` attributes, you can generate [online](https://github.com/reehoiyan/self-clip) or checkout these usable options:
+### 3. Set `data-` attributes, you can generate [online](https://github.com/reehoiyan/self-clip) or checkout these usable options:
 
 * data-background: color (Hex)
 * data-hair: color (Hex)
