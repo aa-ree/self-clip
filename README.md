@@ -1,19 +1,19 @@
 # **`<self-clip>`** element
 ### A icon customzation allows you to play with.
 
-I was watching web component recently, learning about `<template>`, shadow DOM, Custom Elements, HTML imports. So I decided create a web component, but not using any polyfills.
+I was watching web component recently, learning about `<template>`, shadow DOM, Custom Elements, HTML imports. I decided create a web component, but not using any polyfills.
 So, `<self-clip>` is rarely supported, it's able to run in which had implemented import attribute and registerElement function.
 
 ### Usage
 
-To use it, simply download the element.html that inside the component file.
+To use it, simply download the element.min.html that inside the component file.
 ##### Import to your html:
-```
-<link rel="import" href="element.html">
+```html
+<link rel="import" href="element.min.html">
 ```
 
 ##### Use self-clip wherever you want:
-```
+```html
 <self-clip></self-clip>
 ```
 
@@ -46,5 +46,9 @@ To use it, simply download the element.html that inside the component file.
 
 ##### You are good to go!
 
+### Example here
+```html
+<self-clip data-background="#80B88C" data-hair="#000000" data-cloth="#A0DBDF" data-eyes="#000000" data-config='{ "hair": { "length": "long", "bang": "left" }, "sense": { "eyes": "big", "mouth": "joy" }, "accessory": "none" }'></self-clip>
+```
 ![Image of self-clip example]
 (https://reehoiyan.github.io/self-clip/assets/icons.png)

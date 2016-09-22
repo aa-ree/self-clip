@@ -188,150 +188,6 @@
     var MYAPP = {};
     /**
      * @namespace MYAPP
-     * @Object BindConfig
-     * @constructor
-     */
-    MYAPP.BindConfig = function(name, value, config){
-        /**
-         * @property name, value
-         * @type string
-         */
-        this.name = name;
-        this.value = value;
-        /**
-         * @property config
-         * @type object
-         */
-        this.config = config;
-    }
-    /**
-     * @method setName
-     * @param {String}
-     */
-    MYAPP.BindConfig.prototype.setName = function(name){
-        this.name = name;
-    }
-    /**
-     * @method setValue
-     * @param {String}
-     */
-    MYAPP.BindConfig.prototype.setValue = function(value){
-        this.value = value;
-    }
-    /**
-     * @method getValue
-     * @return {String}
-     */
-    MYAPP.BindConfig.prototype.getValue = function(){
-        return this.value;
-    }
-    /**
-     * @method getName
-     * @return {String}
-     */
-    MYAPP.BindConfig.prototype.getName = function(){
-        return this.name;
-    }
-    /**
-     * @method setConfig
-     * @param {Object}
-     */
-    MYAPP.BindConfig.prototype.setConfig = function(config){
-        var newName = this.getName(),
-            newValue = this.getValue();
-        
-        for(var key in config){
-            if(key === newName){
-                config[key] = newValue;
-            } else {
-                for(var name in config[key]){
-                    if(name === newName){
-                        config[key][name] = newValue;
-                    }
-                }
-            }
-        }
-    }
-    /**
-     * @method getConfig
-     * @return {Object}
-     */
-    MYAPP.BindConfig.prototype.getConfig = function(){
-        return this.config;
-    }
-    /**
-     * @namespace MYAPP
-     * @Object Controller
-     * @constructor
-     */
-    MYAPP.Controller = function(bg, hair, cloth, eyes){
-        /**
-         * @property bg, hair, cloth, eyes
-         * @type string
-         */
-        this.bg = bg;
-        this.hair = hair;
-        this.cloth = cloth;
-        this.eyes = eyes;
-    }
-    /**
-     * @method setBackground
-     * @param {String}
-     */
-    MYAPP.Controller.prototype.setBackground = function(b){
-        this.bg = b;
-    }
-    /**
-     * @method getBackground
-     * @return {String}
-     */
-    MYAPP.Controller.prototype.getBackground = function(){
-        return this.bg;
-    }
-    /**
-     * @method setHair
-     * @param {String}
-     */
-    MYAPP.Controller.prototype.setHair = function(b){
-        this.hair = b;
-    }
-    /**
-     * @method getHair
-     * @return {String}
-     */
-    MYAPP.Controller.prototype.getHair = function(){
-        return this.hair;
-    }
-    /**
-     * @method setCloth
-     * @param {String}
-     */
-    MYAPP.Controller.prototype.setCloth = function(b){
-        this.cloth = b;
-    }
-    /**
-     * @method getCloth
-     * @return {String}
-     */
-    MYAPP.Controller.prototype.getCloth = function(){
-        return this.cloth;
-    }
-    /**
-     * @method setEyes
-     * @param {String}
-     */
-    MYAPP.Controller.prototype.setEyes = function(b){
-        this.eyes = b;
-    }
-    /**
-     * @method getEyes
-     * @return {String}
-     */
-    MYAPP.Controller.prototype.getEyes = function(){
-        return this.eyes;
-    }
-    /**
-     * @namespace MYAPP
      * @Object TasksObj
      * @constructor
      */
@@ -517,40 +373,6 @@
         }
 
         /**
-         * @method toObject
-         * @param {Array}
-         * @return {Object}
-         */
-        function toObject(arr){
-            var obj = {}, s, c, sArr = [];
-            for(var i=0; i<arr.length; i++){
-                s = arr[i].toString();
-                c = s.match(/^(\S+)\s(.*)/).slice(1);
-                for(var j=1; j<c.length; j++){
-                    obj[c[j-1]] =  c[j];
-                }
-            }
-            return obj;
-        }
-
-        /**
-         * @method changeHandler
-         * @param {Object}
-         * Select change function, set the changes to BindConfig object
-         */
-        function changeHandler(evt){
-            var to = evt.target;
-            to.thisValue.setName(this.name);
-            to.thisValue.setValue(this.value);
-            to.thisValue.setConfig(to.config);
-            parseConfig(to.thisValue.getConfig());
-            to.el.setAttribute('data-config', JSON.stringify(to.thisValue.getConfig()));
-            var txt = document.querySelector('textarea');
-            txt.value = "<self-clip  data-config='"+ JSON.stringify(to.thisValue.getConfig()) +"'></self-clip>";
-            txtHandler(txt, to.color.getBackground(), to.color.getHair(), to.color.getCloth(), to.color.getEyes());
-        }
-
-        /**
          * @method customElement
          * Main
          */
@@ -575,21 +397,9 @@
                     hair = this.getAttribute('data-hair'),
                     cloth = this.getAttribute('data-cloth'),
                     eyes = this.getAttribute('data-eyes'),
-                    config = JSON.parse(attr), c, control,
-                    newClass = "eyes-pos", i, txt, start, end,
-                    oldValue = [], toObj, that = this,
-                    select = document.getElementsByTagName('select');
+                    config = JSON.parse(attr), c,
+                    newClass = "eyes-pos", that = this;
 
-                    controll = new MYAPP.Controller(bg, hair, cloth, eyes);
-
-                    for(i=0; i<select.length;i++){
-                        oldValue[i] = new MYAPP.BindConfig(select[i].name, select[i].value, config);
-                        select[i].addEventListener("change", changeHandler, false);
-                        select[i].config = config;
-                        select[i].thisValue = oldValue[i];
-                        select[i].color = controll;
-                        select[i].el = that;
-                    }
                     if(config.hair.length === 'short'){
                         config.sense[newClass] = "down";
                     }
@@ -598,18 +408,15 @@
                     tk = new MYAPP.TasksObj(doc, tasks, t, that, false);
                     c = tk.createFragment();
                     tk.pasteContent(c);
-                    txt = document.querySelector('textarea');
-                    txt.value = "<self-clip  data-config='"+JSON.stringify(toObject(tasks))+"'></self-clip>";
-                    addAttr(controll, txt, this);
-                    txtHandler(txt, controll.getBackground(), controll.getHair(), controll.getCloth(), controll.getEyes(), false);
-            }
-            /**
-             * @method attributeChangedCallback
-             * custom element has changed callback
-             */
-            proto.attributeChangedCallback = function(){
-                tk.setTasks(tasks);
-            }
+
+             }
+             /**
+              * @method attributeChangedCallback
+              * custom element has changed callback
+              */
+             proto.attributeChangedCallback = function(){
+                 tk.setTasks(tasks);
+             }
             MYAPP.selfClip = document.registerElement('self-clip', {prototype: proto});
 
         } else {
@@ -617,118 +424,5 @@
         }
     }
     customElement();
-
-    /**
-     * @method inputAction
-     * @param {String}
-     * @param input {Element}
-     * config to set default color display
-     */
-    function inputAction(bg, hair, cloth, eyes, input){
-        switch (input.id) {
-            case "hair":
-                input.value = hair;
-                break;
-
-            case "background":
-                input.value = bg;
-                break;
-
-            case "cloth":
-                input.value = cloth;
-                break;
-
-            case "eyes":
-                input.value = eyes;
-                break;
-
-            default:
-                input.value = "#ffffff";
-        }
-    }
-
-    /**
-     * @method changeColorHandler
-     * @param {Object}
-     * Set color when select other color
-     */
-    function changeColorHandler(evt){
-
-        evt.target.self.setAttribute('data-'+this.id, this.value);
-        switch (this.id) {
-            case "hair":
-                evt.target.ctrl.setHair(this.value);
-                break;
-
-            case "background":
-                evt.target.ctrl.setBackground(this.value);
-                break;
-
-            case "cloth":
-                evt.target.ctrl.setCloth(this.value);
-                break;
-
-            case "eyes":
-                evt.target.ctrl.setEyes(this.value);
-                break;
-
-            default:
-                break;
-        }
-
-        txtHandler(evt.target.txt, 
-            evt.target.ctrl.getBackground(), 
-            evt.target.ctrl.getHair(), 
-            evt.target.ctrl.getCloth(), 
-            evt.target.ctrl.getEyes(), true);
-    }
-
-    /**
-     * @method addAttr
-     * @param {Object}
-     * @param {String}
-     * @param {Object}
-     * Get those data attr color to do their action
-     */
-    function addAttr(controller, txt, self){
-        var latestBg = controller.getBackground(),
-            latestHair = controller.getHair(),
-            latestEyes = controller.getEyes(),
-            latestCloth = controller.getCloth();
-
-        if( latestBg || latestHair || latestEyes || latestCloth){
-            var input = document.getElementsByTagName('input');
-                for(var i=0; i<input.length; i++){
-                    input[i].addEventListener("input", changeColorHandler, false);
-                    input[i].ctrl = controller;
-                    input[i].self = self;
-                    input[i].txt = txt;
-                    inputAction(latestBg, latestHair, latestCloth, latestEyes, input[i]);    
-                }
-        }
-    }
-
-    /**
-     * @method txtHandler
-     * @param {String, String, String, String, String, boolean}
-     * textarea text handler
-     */
-     function txtHandler(txt, latestBg, latestHair, latestCloth, latestEyes, change){
-         var start = txt.value.substring(0, 11),
-             org = txt.value.substring(12, txt.length),
-             
-             middle = (latestBg ? 'data-background="'+latestBg+'" ' : '' )+
-                        ( latestHair ? 'data-hair="'+latestHair+'" ' : '') + 
-                        ( latestCloth ? 'data-cloth="'+latestCloth+'" ' : '')+
-                        ( latestEyes ? 'data-eyes="'+latestEyes+'" ' : ''),
-
-             end = txt.value.substring(middle.length+start.length, txt.length);
-
-            if(change){
-                txt.value = start + middle + end;
-            } else txt.value = start + middle + org;
-             txt.select();
-             return txt;
-     }
 
 </script>
