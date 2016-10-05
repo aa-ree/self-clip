@@ -6,10 +6,10 @@ So, `<self-clip>` is rarely supported, it's able to run in which had implemented
 
 ## Usage
 
-To use it, simply download the *element.min.html* that inside the component file.
+To use it, simply `npm install selfclip`.
 ### 1. Import to your html:
 ```html
-<link rel="import" href="element.min.html">
+<link rel="import" href="selfclip/self-clip.html">
 ```
 
 ### 2. Use self-clip wherever you want:
@@ -17,13 +17,13 @@ To use it, simply download the *element.min.html* that inside the component file
 <self-clip></self-clip>
 ```
 
-### 3. Set `data-` attributes, you can generate [online](https://github.com/reehoiyan/self-clip) or checkout these usable options:
+### 3. Set `data-` attributes, you can generate [online](https://reehoiyan.github.io/self-clip/) or checkout these usable options:
 
 * data-background: color (Hex)
 * data-hair: color (Hex)
 * data-cloth: color (Hex)
 * data-eyes: color (Hex)
-- data-config
+- data-config (- MUST -)
   - hair
     - length
        - long
@@ -44,7 +44,8 @@ To use it, simply download the *element.min.html* that inside the component file
     - glass
     - earrings
 
-### You are good to go!
+### Note: It is always need `data-config`.
+### Then, you are good to go!
 
 ### Example
 ```html
