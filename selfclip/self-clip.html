@@ -1,5 +1,30 @@
 <template id="sdtemplate">
-  <style>
+<svg class="clip-svg">
+      <defs>
+        <clipPath id="clipBefore" clipPathUnits="objectBoundingBox">
+            <polygon points="0 0, 1 0, 1 1" />
+        </clipPath>
+      </defs>  
+  </svg>
+  <svg class="clip-svg">
+      <defs>
+        <clipPath id="clipAfter" clipPathUnits="objectBoundingBox">
+            <polygon points="0.06 0.01, 0 0.5, 1 0" />
+        </clipPath>
+      </defs>  
+  </svg>
+  <svg class="clip-svg">
+      <defs>
+        <clipPath id="clipHair" clipPathUnits="objectBoundingBox">
+            <polygon points="0 0, 0.8 1, 0.8 0" />
+        </clipPath>
+      </defs>  
+  </svg>
+<style id="menu">
+    svg{
+      width: 0;
+      height: 0;
+    }
     .icons{
         width: 150px;
         height: 150px;
@@ -28,16 +53,42 @@
         border-radius: 30px;
         z-index: 1;
     }
-    .base:after{
-        content: "";
-        position: absolute;
-        top: 100px;
-        left: 40px;
-        width: 70px;
-        height: 50px;
-        background: #A0DBDF;
-        border-radius: 15px;
-        z-index: 1;
+
+    .chrome .base:after{
+            content: "";
+            position: absolute;
+            background: #A0DBDF;
+            top: 100px;
+            left: 40px;
+            width: 70px;
+            height: 50px;
+            border-radius: 15px;
+            z-index: 1;
+        }
+     .chrome .hair:before{
+          content: "";
+          position: absolute;
+          top: 20px;
+          left: 8px;
+          height: 100px;
+          background: rgb(51,49,49);
+          -webkit-clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
+          clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
+          clip-path: url(#clipAfter);
+          z-index: 1;
+      }
+      .chrome .hair:after{
+          content: "";
+          position: absolute;
+          top: 20px;
+          left: 70px;
+          width: 26px;
+          height: 49px;
+          background: rgb(51,49,49);
+          -webkit-clip-path: polygon(0 0, 80% 100%, 80% 0%);
+          clip-path: polygon(0 0, 80% 100%, 80% 0%);
+          clip-path: url(#clipHair);
+          z-index: 1;
     }
     .hair{
         position: absolute;
@@ -48,45 +99,24 @@
         left: 25px;
         border-radius: 45px;
     }
-    .hair:before{
-        content: "";
-        position: absolute;
-        top: 20px;
-        left: 8px;
-        height: 100px;
-        background: rgb(51,49,49);
-        -webkit-clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
-        clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
-        z-index: 1;
-    }
-    .hair:after{
-        content: "";
-        position: absolute;
-        top: 20px;
-        left: 70px;
-        width: 26px;
-        height: 49px;
-        background: rgb(51,49,49);
-        -webkit-clip-path: polygon(0 0, 80% 100%, 80% 0%);
-        clip-path: polygon(0 0, 80% 100%, 80% 0%);
-        z-index: 1;
-    }
+
     .length-short{
         height: 120px;
     }
     .length-long{
         height: 150px;
     }
-    .bang-left:before{
+    .bang-left:before, .bang-left .left{
         width: 65px;
     }
-    .bang-right:after{
+    .chrome .bang-right:after, .bang-right .right{
         top: 19px;
         left: 16px;
         width: 76px;
         height: 42px;
         -webkit-clip-path: polygon(0 0, 100% 0%, 100% 100%);
         clip-path: polygon(0 0, 100% 0%, 100% 100%);
+        clip-path: url(#clipBefore);
     }
     .bang-none:before, .bang-right:before{
         width: 25px;
@@ -182,6 +212,42 @@
     .eyes-small:before{
         box-shadow: 84px 0 rgb(255, 201, 177);
     }
+
+    .left{
+        position: absolute;
+        top: 20px;
+        left: 8px;
+        width: 26px;
+        height: 100px;
+        background: rgb(51,49,49);
+        -webkit-clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
+        clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
+        clip-path: url(#clipAfter);
+        z-index: 1;
+      }
+     .right{
+          position: absolute;
+          top: 20px;
+          left: 70px;
+          width: 26px;
+          height: 49px;
+          background: rgb(51,49,49);
+          -webkit-clip-path: polygon(0 0, 80% 100%, 80% 0%);
+          clip-path: polygon(0 0, 80% 100%, 80% 0%);
+          clip-path: url(#clipHair);
+          z-index: 1;
+      }
+    .cloth{
+        position: absolute;
+        background: #A0DBDF;
+        top: 100px;
+        left: 40px;
+        width: 70px;
+        height: 50px;
+        border-radius: 15px;
+        z-index: 1;
+      }
+    }
   </style>
 </template>
 <script>
@@ -191,7 +257,7 @@
      * @Object TasksObj
      * @constructor
      */
-    MYAPP.TasksObj = function(doc, tasks, t, el, container){
+    MYAPP.TasksObj = function(chrome, doc, tasks, t, el, container, bgColor, hairColor, eyesColor, clothColor){
         /**
          * @property doc
          * @type Element
@@ -222,6 +288,11 @@
          * @type boolean
          */
         this.container = container;
+        this.bg = bgColor;
+        this.hair = hairColor;
+        this.eyes = eyesColor;
+        this.cloth = clothColor;
+        this.chrome = chrome;
     }
     /**
      * @method setT
@@ -261,72 +332,82 @@
             fg.appendChild(div[i]);
         }
         base.className = 'base';
+
+        if(!this.chrome){
+          var cloth = this.doc.createElement('div');
+              cloth.className = 'cloth';
+              base.appendChild(cloth);
+              content.className += ' other';
+        } else {
+          content.className +=' chrome';
+        }
+        
         content.appendChild(base);
         content.appendChild(fg);
+
+        //for safari & firefox
+        if(!this.chrome){
+          var hair = content.querySelector('.hair');
+          var left = this.doc.createElement('div');
+          var right = this.doc.createElement('div');
+          left.className = 'left';
+          right.className = 'right';
+          hair.appendChild(left);
+          hair.appendChild(right);
+        }
+        
         return content;
-    }
-    /**
-     * @method setRoot
-     * @param {String}
-     * Reset style
-     */
-    MYAPP.TasksObj.prototype.setRoot = function(r){
-        this.root.textContent = r;
-    }
-    /**
-     * @method setTasks
-     * @param {Array}
-     * Reset the className, re-create content and paste it to screen
-     */
-    MYAPP.TasksObj.prototype.setTasks = function(t){
-        this.tasks = t;
-        this.container = true;
-        this.setRoot('');
-        var c = this.createFragment();
-        this.pasteContent(c, this.root);
     }
     /**
      * @method pasteContent
      * @param {Element}
-     * Append content and clone to shadow root, get self-clip data-attr and corresponding change the css style 
+     * Append content and clone to shadow root 
      */
     MYAPP.TasksObj.prototype.pasteContent = function(c){
-        var eyesColor = this.el.getAttribute('data-eyes'),
-            clothColor = this.el.getAttribute('data-cloth'),
-            bgColor = this.el.getAttribute('data-background'),
-            hairColor = this.el.getAttribute('data-hair'),
-            clone, node, i;
-
-            this.t.content.appendChild(c);
-            clone = document.importNode(this.t.content, true);
-            this.el.style.width = '150px';
-            this.el.style.height = '150px';
-            this.root.appendChild(clone);
-
-            node = this['root'].childNodes,
-            style = node[1]['sheet'].cssRules;
-            if(eyesColor || clothColor || bgColor || hairColor){
-                for(i = 0; i<style.length;i++){
-                    if(style[i].selectorText === '.base'){
-                        style[i].style.background = bgColor;
-                    }
-                    if(style[i].selectorText === '.hair' || style[i].selectorText === '.hair::before'
-                       || style[i].selectorText === '.hair::after' ){
-                        style[i].style.background = hairColor;
-                    }
-                    if(style[i].selectorText === '.sense'){
-                        style[i].style.background = eyesColor;
-                        style[i].style.boxShadow = eyesColor+ " 40px 0px ";
-                    }
-                    if(style[i].selectorText === '.eyes-small'){
-                        style[i].style.boxShadow = eyesColor+ " 42px 0px ";
-                    }
-                    if(style[i].selectorText === '.base::after'){
-                        style[i].style.background = clothColor;
-                    }
-               }
-            }
         
+        var clone, i;
+
+        this.t.content.appendChild(c);
+
+        //for safari & firefox
+        if(!this.chrome){
+          var base = this.t.content.querySelectorAll('.base'),
+              cloth = this.t.content.querySelectorAll('.cloth'),
+              hair = this.t.content.querySelectorAll('.hair'),
+              left = this.t.content.querySelectorAll('.left'),
+              right = this.t.content.querySelectorAll('.right'),
+              eyes = this.t.content.querySelectorAll('.sense'),
+              small = this.t.content.querySelectorAll('.eyes-small');
+
+          for(i in base){
+            base[i].style.background = this.bg;
+          }
+          for(i in cloth){
+            cloth[i].style.background = this.cloth;
+          }
+          for(i in hair){
+            hair[i].style.background = this.hair;
+          }
+          for(i in left){
+            left[i].style.background = this.hair;
+          }
+          for(i in right){
+            right[i].style.background = this.hair;
+          }
+          for(i in eyes){
+            eyes[i].style.background = this.eyes;
+            eyes[i].style.boxShadow = this.eyes +" 40px 0";
+          }
+          for(i in small){
+            small[i].style.boxShadow = this.eyes +" 42px 0";
+          }
+        }
+        
+
+        clone = document.importNode(this.t.content, true);
+        this.el.style.width = '150px';
+        this.el.style.height = '150px';
+        this.root.appendChild(clone);
     }
     /**
      * @method getTasks
@@ -336,13 +417,6 @@
         return this.tasks;
     }
 
-        /**
-         * @method checkSupport
-         * @return {Boolean}
-         */
-        function checkSupport(){
-          return ('registerElement' in document);
-        }
 
         /**
          * @method parseConfig
@@ -378,51 +452,75 @@
          */
         function customElement(){
 
-        if(checkSupport()){
-          var doc = document.currentScript.ownerDocument,
+        
+          var doc = document._currentScript.ownerDocument,
               t = doc.querySelector('#sdtemplate'),
               proto = Object.create(HTMLElement.prototype),
               fg = doc.createDocumentFragment(),
               content = doc.createElement('div'),
               base = doc.createElement('div'),
-              tk = '';
-
+              head = doc.createElement('head'),
+              tk = '',
+              isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
               /**
                * @method createdCallback
                * custom element callback
                */
               proto.createdCallback = function(){
                 var attr = this.getAttribute('data-config'),
-                    bg = this.getAttribute('data-background'),
-                    hair = this.getAttribute('data-hair'),
-                    cloth = this.getAttribute('data-cloth'),
-                    eyes = this.getAttribute('data-eyes'),
                     config = JSON.parse(attr), c,
-                    newClass = "eyes-pos", that = this;
+                    newClass = "eyes-pos", that = this,
+                    eyesColor = this.getAttribute('data-eyes'),
+                    clothColor = this.getAttribute('data-cloth'),
+                    bgColor = this.getAttribute('data-background'),
+                    hairColor = this.getAttribute('data-hair');
 
                     if(config.hair.length === 'short'){
                         config.sense[newClass] = "down";
                     }
 
                     parseConfig(config);
-                    tk = new MYAPP.TasksObj(doc, tasks, t, that, false);
+                    tk = new MYAPP.TasksObj(isChrome, doc, tasks, t, that, false, bgColor, hairColor, eyesColor, clothColor);
                     c = tk.createFragment();
                     tk.pasteContent(c);
-
              }
-             /**
-              * @method attributeChangedCallback
-              * custom element has changed callback
+
+             proto.attachedCallback = function(){
+              if(isChrome){
+                var el = this, that = this,
+                    style = this.shadowRoot.querySelector('style'),
+                    eyesColor = this.getAttribute('data-eyes'),
+                    clothColor = this.getAttribute('data-cloth'),
+                    bgColor = this.getAttribute('data-background'),
+                    hairColor = this.getAttribute('data-hair');
+                    
+                    setTimeout(function() 
+                      {
+                        var sheet = style.sheet;
+                        that.insertMultiple(sheet, ['.base { background: ' + bgColor + ' ; }',
+                                  '.chrome .base::after { background: ' + clothColor + ' ; }',
+                                  '.hair { background: ' + hairColor + ' ; }',
+                                  '.chrome .hair::before { background: ' + hairColor + ' ; }',
+                                  '.chrome .hair::after { background: ' + hairColor + ' ; }',
+                                  '.sense { box-shadow: ' + eyesColor + ' 40px 0 ; }',
+                                  '.sense { background: ' + eyesColor + ' ; }',
+                                  '.eyes-small { box-shadow: ' + eyesColor + ' 42px 0 ; }'
+                        ]);
+                    });
+              }
+              /**
+              * @method insertMultiple
+              * For insert multiple CSS rules
               */
-             proto.attributeChangedCallback = function(){
-                 tk.setTasks(tasks);
+              proto.insertMultiple = function(sheet, arr){
+                for(var i in arr){
+                  sheet.insertRule(arr[i], sheet.cssRules.length);
+                }
+              }
              }
             MYAPP.selfClip = document.registerElement('self-clip', {prototype: proto});
 
-        } else {
-          alert("Sorry, your browser not supporting custom Elements without polyfill.");
-        }
-    }
+          }
     customElement();
 
 </script>
