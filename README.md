@@ -1,15 +1,23 @@
 # **`<self-clip>`** element
 ### A icon customzation allows you to play with.
 
-I was watching web component recently, learning about `<template>`, shadow DOM, Custom Elements, HTML imports. I decided create a web component, it is using polyfill `webcomponent.js` now.
+I was watching web component recently, learning about `<template>`, shadow DOM, Custom Elements, HTML imports. I decided create a web component, it is using polyfill `webcomponents.js` now.
 So, `<self-clip>` able to use wherever you want.
 
 ## Usage
 
-To use it, you simply need `npm install webcomponent.js` and `npm install selfclip`.
+To use it, you simply need 
+```
+npm install webcomponents.js
+```
+and
+```
+npm install selfclip
+```
 ### 1. Import to your html:
 ```html
-<link rel="import" href="selfclip/self-clip.html">
+<script src="node_modules/webcomponents.js/webcomponents.js"></script>
+<link rel="import" href="node_modules/selfclip/self-clip.html">
 ```
 
 ### 2. Use self-clip wherever you want:
