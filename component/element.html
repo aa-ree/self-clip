@@ -735,10 +735,9 @@
                     hair = this.getAttribute('data-hair'),
                     cloth = this.getAttribute('data-cloth'),
                     eyes = this.getAttribute('data-eyes');
+                    tk.setTasks(tasks, bg, hair, eyes, cloth);
 
-                    if(!isChrome){
-                        tk.setTasks(tasks, bg, hair, eyes, cloth);
-                    } else {
+                    if(isChrome){
                         var style = this.shadowRoot.querySelector('style'),
                             sheet = style.sheet;
 
