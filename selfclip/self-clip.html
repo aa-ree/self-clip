@@ -53,7 +53,6 @@
         border-radius: 30px;
         z-index: 1;
     }
-
     .chrome .base:after{
             content: "";
             position: absolute;
@@ -97,7 +96,6 @@
         left: 25px;
         border-radius: 45px;
     }
-
     .length-short{
         height: 120px;
     }
@@ -205,11 +203,9 @@
     .eyes-small:after{
         left: 19px;
     }
-
     .eyes-small:before{
         box-shadow: 84px 0 rgb(255, 201, 177);
     }
-
     .left{
         position: absolute;
         top: 20px;
@@ -296,7 +292,6 @@
      * Remove duplicate childNode
      */
     MYAPP.TasksObj.prototype.setT = function(){
-
         if(this.t.content && this.t.content.childNodes.length > 3){
             var len = this.t.content.childNodes.length;
                 this.t.content.childNodes[len-1].remove();
@@ -313,7 +308,6 @@
             div = [], i, clone, content,
             fg = this.doc.createDocumentFragment(),
             base = this.doc.createElement('div');
-
             if(this.container){
                 content = this.t.content.querySelector('div');
                 content.innerHTML = '';
@@ -322,14 +316,12 @@
                  content.className = 'icons';
                  this.setT();
             }
-
         for(i=0; i<len; i++){
             div[i] = this.doc.createElement('div');
             div[i].className = task[i];
             fg.appendChild(div[i]);
         }
         base.className = 'base';
-
         if(!this.chrome){
           var cloth = this.doc.createElement('div');
               cloth.className = 'cloth';
@@ -342,7 +334,6 @@
         
         content.appendChild(base);
         content.appendChild(fg);
-
         //for safari & firefox
         if(!this.chrome){
           var hair = content.querySelector('.hair');
@@ -364,9 +355,7 @@
     MYAPP.TasksObj.prototype.pasteContent = function(c){
         
         var clone, i;
-
         this.t.content.appendChild(c);
-
         //for safari & firefox
         if(!this.chrome){
           var base = this.t.content.querySelectorAll('.base'),
@@ -376,7 +365,6 @@
               right = this.t.content.querySelectorAll('.right'),
               eyes = this.t.content.querySelectorAll('.sense'),
               small = this.t.content.querySelectorAll('.eyes-small');
-
           for(i in base){
             base[i].style.background = this.bg;
           }
@@ -401,7 +389,6 @@
           }
         }
         
-
         clone = document.importNode(this.t.content, true);
         this.el.style.width = '150px';
         this.el.style.height = '150px';
@@ -414,8 +401,6 @@
     MYAPP.TasksObj.prototype.getTasks = function(){
         return this.tasks;
     }
-
-
         /**
          * @method parseConfig
          * @param {Object}
@@ -443,13 +428,11 @@
             }
             return tasks;
         }
-
         /**
          * @method customElement
          * Main
          */
         function customElement(){
-
         
           var doc = document._currentScript.ownerDocument,
               t = doc.querySelector('#sdtemplate'),
@@ -472,17 +455,14 @@
                     clothColor = this.getAttribute('data-cloth'),
                     bgColor = this.getAttribute('data-background'),
                     hairColor = this.getAttribute('data-hair');
-
                     if(config.hair.length === 'short'){
                         config.sense[newClass] = "down";
                     }
-
                     parseConfig(config);
                     tk = new MYAPP.TasksObj(isChrome, doc, tasks, t, that, false, bgColor, hairColor, eyesColor, clothColor);
                     c = tk.createFragment();
                     tk.pasteContent(c);
              }
-
              proto.attachedCallback = function(){
               if(isChrome){
                 var el = this, that = this,
@@ -517,8 +497,6 @@
               }
              }
             MYAPP.selfClip = document.registerElement('self-clip', {prototype: proto});
-
           }
     customElement();
-
 </script>
