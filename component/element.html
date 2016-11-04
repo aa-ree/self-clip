@@ -74,8 +74,10 @@
           background: rgb(51,49,49);
           -webkit-clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
           clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
-          /*clip-path: url(#clipAfter);*/
           z-index: 1;
+      }
+      .other .hair:before{
+        clip-path: url(#clipAfter);
       }
       .chrome .hair:after{
           content: "";
@@ -87,8 +89,10 @@
           background: rgb(51,49,49);
           -webkit-clip-path: polygon(0 0, 80% 100%, 80% 0%);
           clip-path: polygon(0 0, 80% 100%, 80% 0%);
-          /*clip-path: url(#clipHair);*/
           z-index: 1;
+    }
+    .other .hair:after{
+      clip-path: url(#clipHair);
     }
     .hair{
         position: absolute;
@@ -109,13 +113,16 @@
     .bang-left:before, .bang-left .left{
         width: 65px;
     }
-    .chrome .bang-right:after, .bang-right .right{
+    .chrome .bang-right:after,.bang-right .right{
         top: 19px;
         left: 16px;
         width: 76px;
         height: 42px;
         -webkit-clip-path: polygon(0 0, 100% 0%, 100% 100%);
         clip-path: polygon(0 0, 100% 0%, 100% 100%);
+    }
+    .other .bang-right .right{
+      clip-path: url(#clipBefore);
     }
     .bang-none:before, .bang-right:before{
         width: 25px;
