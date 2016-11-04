@@ -74,7 +74,6 @@
           background: rgb(51,49,49);
           -webkit-clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
           clip-path: polygon(6% 1%, 0% 50%, 100% 0%);
-          clip-path: url(#clipAfter);
           z-index: 1;
       }
       .chrome .hair:after{
@@ -87,7 +86,6 @@
           background: rgb(51,49,49);
           -webkit-clip-path: polygon(0 0, 80% 100%, 80% 0%);
           clip-path: polygon(0 0, 80% 100%, 80% 0%);
-          clip-path: url(#clipHair);
           z-index: 1;
     }
     .hair{
@@ -116,7 +114,6 @@
         height: 42px;
         -webkit-clip-path: polygon(0 0, 100% 0%, 100% 100%);
         clip-path: polygon(0 0, 100% 0%, 100% 100%);
-        clip-path: url(#clipBefore);
     }
     .bang-none:before, .bang-right:before{
         width: 25px;
@@ -482,7 +479,8 @@
               base.appendChild(cloth);
               content.className += ' other';
         } else {
-          content.className +=' chrome';
+          if(!content.classList.contains('chrome'))
+            content.className +=' chrome';
         }
         
         content.appendChild(base);
